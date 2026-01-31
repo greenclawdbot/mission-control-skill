@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Mission Control Skill - Poll and Spawn
-// Runs during heartbeat to check for orphaned tasks and spawn sub-agents
+// Runs during heartbeat to check for orphaned tasks
 
 const API_URL = 'http://192.168.1.84:3001';
 const SESSION_KEY = `mc:${Date.now()}`;
@@ -37,20 +37,27 @@ async function pollForWork() {
   }
 }
 
-// Run and output result for clawdbot to parse
+// Run and output result
 pollForWork()
   .then(task => {
     if (task) {
-      // Output JSON that clawdbot can parse
-      console.log(JSON.stringify({
-        found: true,
-        taskId: task.id,
-        title: task.title
-      }, null, 2));
+      console.log('');
+      console.log('=== TASK FOUND ===');
+      console.log(`ID: ${task.id}`);
+      console.log(`Title: ${task.title}`);
+      console.log('');
+      console.log('To spawn sub-agent, run:');
+      console.log(`sessions_spawn({`);
+      console.log(`  task: "Complete: ${task.title}",`);
+      console.log(`  label: "mission-control:${task.id}",`);
+      console.log(`  cleanup: "delete"`);
+      console.log(`})`);
+      console.log('');
     } else {
-      console.log(JSON.stringify({ found: false }));
+      console.log('[MC-SKILL] No work found');
     }
   })
   .catch(err => {
-    console.error(JSON.stringify({ error: err.message }));
+    console.error('[MC-SKILL] Error:', err.message);
+    process.exit(1);
   });

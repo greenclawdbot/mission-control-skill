@@ -1,0 +1,12 @@
+{
+  "name": "mission-control",
+  "version": "0.1.0",
+  "description": "Mission Control skill for clawdbot - polls for orphaned tasks and spawns sub-agents",
+  "main": "scripts/poll-and-spawn.cjs",
+  "scripts": {
+    "start": "node scripts/poll-and-spawn.cjs",
+    "poll": "node scripts/poll.cjs"
+  },
+  "keywords": ["mission-control", "kanban", "tasks"],
+  "author": "The Claw"
+}
